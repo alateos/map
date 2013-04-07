@@ -7,6 +7,8 @@ var selected_array = new Array();
 
 // the sum of all home prices for each zip code in our data set
 var prices = new Array();
+// the sum of all home zestimates for each zip code in our data set
+var zestimates = new Array();
 // the count of all home listings for each zip code in our data set
 var counts = new Array();
 // the max home price for each zip code in our data set
@@ -213,7 +215,10 @@ function selectZip(circle,zip,circles) {
 	
 	// output details on demand in designated div
 	showDetails(zip);
-
+	
+	// create bullet graph
+	bulletGraph(zip);
+	
 	//PASS THE ZIP CODE TO SCATTER PLOT BELOW
 	//mikesFunction(zip);
 	}
@@ -252,6 +257,8 @@ function getDetails(zip) {
 
 /** returns radius length to be applied to each circle on the google map */
 function getRadius(zip) {
+	// note that here, we tried d3 scaling; the results were off - hence our decision to manually scale the radii of the circles
+	
 	if(document.getElementById("count").checked) {
 		var num_listings = counts[zip];
 		return num_listings;
@@ -303,20 +310,23 @@ function initialize() {
 /** clears all of our output arrays */
 function clearBuckets() {
 	prices = [];
+	zestimates = [];
 	counts = [];
 	maxes = [];
 	mins = [];		
 }
 
 /** load a given home listing into the corresponding output arrays */
-function loadListing(zip,price) {
+function loadListing(zip,price,zestimate) {
 	// if the zip code for this home has not been registered yet
 	if(prices[zip] == null) {
 		prices[zip] = 0;
+		zestimates[zip] = 0;
 		counts[zip] = 0;
 		maxes[zip] = 0;
 		mins[zip] = 100000000;
 		prices[zip] = parseInt(prices[zip]) + parseInt(price);
+		zestimates[zip] = parseInt(zestimates[zip]) + parseInt(zestimate);
 		counts[zip]++;
 		if(mins[zip] >= parseInt(price)) {
 			mins[zip] = parseInt(price);
@@ -327,6 +337,7 @@ function loadListing(zip,price) {
 	// if this zip code for this home already exists in our arrays
 	} else {
 		prices[zip] = parseInt(prices[zip]) + parseInt(price);
+		zestimates[zip] = parseInt(zestimates[zip]) + parseInt(zestimate);
 		counts[zip]++;
 		if(mins[zip] >= parseInt(price)) {
 			mins[zip] = parseInt(price);
@@ -380,7 +391,7 @@ function loadBuckets(d,beds,baths,min_sqft,max_sqft,min_year,max_year) {
 
 		// check if the necessary filters were selected to cause a meaningful query
 		if (bed_criterion == 1 && bath_criterion == 1 && sqft_criterion == 1 && year_criterion == 1) {
-			loadListing(selected_array[listing].zip,selected_array[listing].price);
+			loadListing(selected_array[listing].zip,selected_array[listing].price,selected_array[listing].zestimate);
 		} 
 
 		// reset criteria flags
@@ -389,4 +400,25 @@ function loadBuckets(d,beds,baths,min_sqft,max_sqft,min_year,max_year) {
 		sqft_criterion = 0;
 		year_criterion = 0;
 	}
+}
+
+/** create a bullet graph of actual versus project price based on selected zip code */
+function bulletGraph(zip) {
+	// remove the "actual" bar
+	d3.select(".actual").remove();
+	// remove the "zestimate" bar
+	d3.select(".zestimate").remove();
+	// scale our range to maximum price of selected zip, and the range to the width of the bullet graph
+	var scale =	d3.scale.linear().domain([0,maxes[zip]]).range([0,400]);
+	// scale actual price amount
+	price = scale(parseInt(parseInt(prices[zip])/parseInt(counts[zip])));
+	// scale zestimate amount
+	zestimate = scale(parseInt(parseInt(zestimates[zip])/parseInt(counts[zip])));
+	// price data array to be passed to d3
+	price = [price];
+	// zestimate data array to be passed to d3
+	zestimate = [zestimate];
+	// add animated bars to bullet graph with set parameters
+	d3.select("#bullet").selectAll("div").data(zestimate).enter().append("div").attr("class","actual").transition().style("width",function(d){return d+"px"}).text("actual");
+	d3.select("#bullet").data(price).append("div").attr("class","zestimate").transition().style("width",function(d){return d+"px"}).text("zestimate");
 }
