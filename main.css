@@ -62,7 +62,6 @@ body {
 	float:left;
 	width:400px;
 	height:82px;
-	background-color:#CACDD0;
 	margin-left:30px;
 	margin-top:50px;
 }
@@ -85,4 +84,15 @@ body {
 	top:495px;
 	color:grey;
 	vertical-align:text-top;
+}
+
+.max {
+	height:90px;
+	margin-bottom:5px;
+	background-color:#DFE8F7;
+	position:absolute;
+	top:480px;
+	color:gray;
+	vertical-align:text-top;
+	z-index:-5;
 }

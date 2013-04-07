@@ -411,17 +411,25 @@ function bulletGraph(zip) {
 	d3.select(".actual").remove();
 	// remove the "zestimate" bar
 	d3.select(".zestimate").remove();
+	// remove the "max" bar
+	d3.select(".max").remove();
 	// scale our range to maximum price of selected zip, and the range to the width of the bullet graph
 	var scale =	d3.scale.linear().domain([0,maxes[zip]]).range([0,400]);
 	// scale actual price amount
 	price = scale(parseInt(parseInt(prices[zip])/parseInt(counts[zip])));
+	// scale max value per selected zip
+	max = scale(parseInt(maxes[zip]));
 	// scale zestimate amount
 	zestimate = scale(parseInt(parseInt(zestimates[zip])/parseInt(counts[zip])));
 	// price data array to be passed to d3
 	price = [price];
 	// zestimate data array to be passed to d3
 	zestimate = [zestimate];
+	// max data array to be passed to d3
+	max = [max];
 	// add animated bars to bullet graph with set parameters
-	d3.select("#bullet").selectAll("div").data(zestimate).enter().append("div").attr("class","actual").transition().style("width",function(d){return d+"px"}).text("actual");
-	d3.select("#bullet").data(price).append("div").attr("class","zestimate").transition().style("width",function(d){return d+"px"}).text("zestimate");
+	d3.select("#bullet").selectAll("div").data(zestimate).enter().append("div").attr("class","actual").transition().duration(600).style("width",function(d){return d+"px"}).text("actual");
+	d3.select("#bullet").data(price).append("div").attr("class","zestimate").transition().duration(1000).style("width",function(d){return d+"px"}).text("zestimate");
+	d3.select("#bullet").data(max).append("div").attr("class","max").transition().duration(1300).style("width",function(d){return d+"px"}).text("max");
+	
 }
