@@ -87,11 +87,11 @@ body {
 }
 
 .max {
-	height:90px;
+	height:100px;
 	margin-bottom:5px;
 	background-color:#DFE8F7;
 	position:absolute;
-	top:480px;
+	top:475px;
 	color:gray;
 	vertical-align:text-top;
 	z-index:-5;
