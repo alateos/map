@@ -14,14 +14,20 @@ var maxes = new Array();
 // the min home price for each zip code in our data set
 var mins = new Array();
 
-// our zip code lookup values data set (includes geo coordinates)
-var zips = JSON.parse(document.getElementById("zips").value);
+// our zip code lookup values in json format data set (includes geo coordinates)
+var zips = "";
 
 // contains the google maps circles to be overlaid on our map
 var circles = new Array();
 
 // google maps map container
 var map = "";
+
+// last selected bedroom checkbox
+var last_bedroom_checked = "";
+
+// last selected baths checkbox
+var last_bath_checked = "";
 
 /** creates the google map and calls for the circles to be created */
 function drawMap() {
@@ -39,6 +45,16 @@ function drawMap() {
 	
 	// plot the intensity circles on the map
 	layCircles();
+}
+
+/** sets the object of the last bedroom checkbox checked to a variable */
+function lastBedroomChecked(checkbox) {
+	last_bedroom_checked = checkbox;
+}
+
+/** sets the object of the last bathroom checkbox checked to a variable */
+function lastBathroomChecked(checkbox) {
+	last_bathroom_checked = checkbox;
 }
 
 /** filters the data based on selected controls and calls for a "redraw" of the map */
@@ -98,22 +114,40 @@ function filter() {
 		document.getElementById("max_year").value = 0; 
 	}
 
+	var count = 0;
+	
 	// populate bedrooms array
 	for(var i in checkboxes) {
 		if(checkboxes[i].className == "bedrooms") { 
 			if(checkboxes[i].checked) {
 				bedrooms.push(checkboxes[i].value);
+				count++;
 			}
 		}
 	}
+	
+	// re-check last bedroom that was unchecked and apply filter again
+	if(count == 0) {
+		last_bedroom_checked.checked = true;
+		filter();
+	}
 
+	count = 0;
+	
 	// populate baths array
 	for(var i in checkboxes) {
 		if(checkboxes[i].className == "baths") { 
 			if(checkboxes[i].checked) {
 				baths.push(checkboxes[i].value);
+				count++;
 			}
 		}
+	}
+	
+	// re-check last bathroom that was unchecked and apply filter again
+	if(count == 0) {
+		last_bathroom_checked.checked = true;
+		filter();
 	}
 
 	// populate output arrays based on filter variables
@@ -250,6 +284,8 @@ function clearCircles() {
 /** loads all of our content from 2 csv files */
 function initialize() {
 	d3.csv("boston_for_sale.csv", function(d) {
+		// populate the zips from the json object in our hidden text area
+		zips = JSON.parse(document.getElementById("zips").value);
 		// populate "homes for sale" array
 		data_for_sale = d;
 		// calls for map to be drawn, since this is our default option
