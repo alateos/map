@@ -160,6 +160,9 @@ function filter() {
 	
 	// clear out details on demand div
 	document.getElementById("details").innerHTML = "";
+	
+	// clear out bullet graph
+	document.getElementById("bullet").innerHTML = "";
 }
 
 /** draws the circles onto the google map */
