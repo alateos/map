@@ -87,6 +87,9 @@ body {
     margin-left: 52px;
     margin-top: 10px;
     text-align: left;
+	position:absolute;
+	left:42%;
+	top:380px;
 }
 
 .label {
@@ -125,7 +128,7 @@ body {
 	margin-top:50px;
 	position:absolute;
 	top:405px;
-	left:44%;
+	left:43.5%;
 }
 
 .actual {
@@ -135,7 +138,7 @@ body {
     margin-bottom: 5px;
     margin-top: 34px;
     position: absolute;
-    z-index: 100;
+    z-index: 2;
 	text-align:center;
 }
 
@@ -148,6 +151,7 @@ body {
     position: absolute;
     vertical-align: text-top;
 	text-align:center;
+    z-index:1;
 }
 
 .max {
@@ -157,12 +161,13 @@ body {
 	position:absolute;
 	color:gray;
 	vertical-align:text-top;
-	z-index:-5;
+	z-index:0;
 	text-align:center;
 }
 
 #tt {
 	 position:absolute;
+     z-index:4;
 	 display:block;
 	 background:url(images/tt_left.gif) top left no-repeat;
  }
@@ -200,6 +205,10 @@ body {
 	background-color:#EEEFF2;
 	font-weight:normal;
 	border-style:none;
+}
+
+.year {
+    visibility: hidden;
 }
 
 .slider {

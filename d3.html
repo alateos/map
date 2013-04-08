@@ -53,15 +53,16 @@
             <div id="houses">
 				<input onclick="layCircles()" id="count" type="radio" name="type" />Number of houses 
 				<input onclick="layCircles()" id="average" type="radio" name="type" checked  />Average price
-				<input onclick="layCircles()" id="max" type="radio" name="type" />Max price
-				<input onclick="layCircles()" id="min" type="radio" name="type" />Min price 
+				<!--<input onclick="layCircles()" id="max" type="radio" name="type" />Max price
+				<input onclick="layCircles()" id="min" type="radio" name="type" />Min price -->
             </div>
 		</div>
+
+		<!-- placeholder for details on demand -->
+        <div id="details"></div>
 		
 		<!-- placeholder for bullet graph -->
         <div class="smallView" id="bullet"></div>
-		<!-- placeholder for details on demand -->
-        <div id="details"></div>
 		
 		<div id="common_controls">
 			<div id="listingtypes">
@@ -80,10 +81,10 @@
 
             <div id="baths">
                 <div>Baths</div>
-                <input type="checkbox" class="baths" onclick="filter()" value="1" checked>1 - 1.5
-                <input type="checkbox" class="baths" onclick="filter()"  value="2" checked>2 - 2.5
-                <input type="checkbox" class="baths" onclick="filter()" value="3" checked>3 - 3.5
-                <input type="checkbox" class="baths" onclick="filter()" value="4" checked>4 - 4.5
+                <input type="checkbox" class="baths" onclick="filter()" value="1" checked>1
+                <input type="checkbox" class="baths" onclick="filter()"  value="2" checked>2
+                <input type="checkbox" class="baths" onclick="filter()" value="3" checked>3
+                <input type="checkbox" class="baths" onclick="filter()" value="4" checked>4
                 <input type="checkbox" class="baths" onclick="filter()" value="5+" checked>5+
             </div>
 
@@ -91,13 +92,13 @@
                 <tr>
 					<td><label for="amountSqft">Square Footage:</label><input type="text" id="amountSqft" /></td>
 					<td><label for="amountPrice">Price:</label><input type="text" id="amountPrice" /></td>
-					<td><label for="amountYear">Year:</label><input type="text" id="amountYear" /></td>
+					<td class="year"><label for="amountYear">Year:</label><input type="text" id="amountYear" /></td>
 				</tr>
                 
 				<tr>
 					<td><div id="slider-range-sqft" class="slider"></div></td>
 					<td><div id="slider-range-price" class="slider"></div></td>
-					<td><div id="slider-range-year" class="slider"></div></td>
+					<td class="year"><div id="slider-range-year" class="slider"></div></td>
 				</tr>
             </table>
         </div>

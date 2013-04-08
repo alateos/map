@@ -80,29 +80,6 @@ function filter() {
 	}
 
     updateChartData(selected_array);
-	
-    /* not needed with sliders
-    // sqft validation
-	if (min_sqft >= max_sqft) {
-		document.getElementById("min_sqft").value = max_sqft;
-	} 
-	if (min_sqft < 0) { 
-		document.getElementById("min_sqft").value = 0; 
-	}
-	if (max_sqft < 0) { 
-		document.getElementById("max_sqft").value = 0; 
-	}
-
-	// year built validation
-	if (min_year >= max_year) {
-		document.getElementById("min_year").value = max_year;
-	} 
-	if (min_year < 0) { 
-		document.getElementById("min_year").value = 0; 
-	}
-	if (max_year < 0) { 
-		document.getElementById("max_year").value = 0; 
-	} */
 
 	// populate bedrooms array
 	for(var i in checkboxes) {
@@ -402,10 +379,30 @@ function bulletGraph(zip) {
 	// max data array to be passed to d3
 	max = [max];
 	// add animated bars to bullet graph with set parameters
-	d3.select("#bullet").selectAll("div").data(zestimate).enter().append("div").attr("class","actual").transition().duration(600).style("width",function(d){return d+"px"}).text("average");
-	d3.select("#bullet").data(price).append("div").attr("class","zestimate").transition().duration(1000).style("width",function(d){return d+"px"}).text("zestimate");
-	d3.select("#bullet").data(max).append("div").attr("class","max").transition().duration(1300).style("width",function(d){return d+"px"}).text("max");
-	
+
+    d3.select("#bullet").selectAll("div").data(price).enter().append("div")
+        .attr("class","actual")
+        .transition().duration(600)
+            .style("width",function(d){return d+"px"})
+            .text("average")
+            .attr("onmousemove",function(d) {return "tooltip.show('Average Price: $" + withCommas(Math.round(prices[zip]/parseInt(counts[zip])))+"');"})
+            .attr("onmouseout","tooltip.hide();");
+    
+    d3.select("#bullet").data(zestimate).append("div")
+        .attr("class","zestimate")
+        .transition().duration(1000)
+            .style("width",function(d){return d+"px"})
+            .text("zestimate")
+            .attr("onmousemove",function(d) {return "tooltip.show('Average Zestimate: $" + withCommas(Math.round(zestimates[zip]/parseInt(counts[zip])))+"');"})
+            .attr("onmouseout","tooltip.hide();");
+            
+	d3.select("#bullet").data(max).append("div")
+        .attr("class","max")
+        .transition().duration(1300)
+            .style("width",function(d){return d+"px"})
+            .text("max")
+            .attr("onmousemove",function(d) {return "tooltip.show('Max Price: $" + withCommas(Math.round(maxes[zip]))+"');"})
+            .attr("onmouseout","tooltip.hide();");
 }
 
 // PricePerSqFtScatterplot
@@ -453,9 +450,6 @@ function createPricePerSqFtScatterplot(data_in) {
             .scale(yScale)
             .orient("left");
 
-        svg.append("g")
-            .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-            .call(d3.behavior.zoom().x(xScale).y(yScale).scaleExtent([1, 8]).on("zoom", zoom));
 		svg.append("g")
               .attr("class", "x axis")
               .attr("transform", "translate(0," + height + ")")
@@ -490,23 +484,7 @@ function createPricePerSqFtScatterplot(data_in) {
 			// fill color of the circles
             .attr("stroke","lightgray")
             .attr("fill","gray");
-        function zoom() {
-            svg.select(".x.axis").call(xAxis);
-            svg.select(".y.axis").call(yAxis);
-        }
-} 
-
-/*** BEGIN BulletGraph   ***
-    function createBulletGraph() {
-        d3.select("#bulletGraph").select("div")
-            // need to know how to access one record from the JSON object
-            .data()//how to do this part
-        var vertScale = d3.scale.linear()
-            .range([0,100])
-            .domain([0,100]);
-    }
-/*** END BulletGraph ***/  
-
+}
 
 function updateChartData(dataIn) {
 
@@ -535,10 +513,7 @@ function updateChartData(dataIn) {
 			}
         }
 	}
-
-    //no longer needed
-    //dataIn.sort(function(a,b) {return b.beds-a.beds+Math.floor(Math.random()*4)});
-    
+        
     xDomain = [minSqFt,maxSqFt];
     yDomain = [maxPrice,minPrice];
 
@@ -551,10 +526,18 @@ function updateChartData(dataIn) {
     
    var svg = d3.select("body").select("#pricePerSqFt").selectAll("circle")
         .data(dataIn)
-                .transition().duration(1000)
-        .attr("cx",function(d) {return xScale(d.sqft)})
-        .attr("cy",function(d) {return yScale(d.price)})
-        .attr("visibility", function(d) {return d.price > minPrice && d.price < maxPrice && d.sqft > minSqFt && d.sqft < maxSqFt && bedrooms.indexOf(String(d.beds))>=0 && baths.indexOf(String(d.baths))>=0  ? "visible" : "hidden"});
+
+        .transition().duration(1000)
+        //tooltip code from: sixrevisions.com 
+            .attr("onmousemove",function(d) {return "tooltip.show('" + listingToDetailsString(d)+"');"})
+            .attr("onmouseout","tooltip.hide();")
+            .attr("cx",function(d) {
+                return xScale(d.sqft);
+            })
+		    .attr("cy",function(d) { 
+                return yScale(d.price);			
+            })
+            .attr("visibility", function(d) {return d.price > minPrice && d.price < maxPrice && d.sqft > minSqFt && d.sqft < maxSqFt && bedrooms.indexOf(String(d.beds))>=0 && baths.indexOf(String(d.baths))>=0  ? "visible" : "hidden"});
             
     d3.select("#pricePerSqFt").select("g.x.axis")
         .transition().duration(1000)
@@ -740,7 +723,7 @@ $(function() {
 	  range: true,
 	  min: 0,
 	  max: 6000000,
-	  values: [ 0, 1000000 ],
+	  values: [ 0, 4000000 ],
 	  slide: function( event, ui ) {
 		$( "#amountPrice" ).val( "$" + ui.values[ 0 ] + " - " + " $" + ui.values[ 1 ]);
 		filter();
