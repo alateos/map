@@ -1,16 +1,80 @@
-html { 
-	height: 100% 
+body {
+	width:100%;
+    margin: 0;
+    padding: 0;
 }
 
-body { 
-	height: 100%; margin: 0; padding: 0;
+
+#pricePerSqFt {
+	width:55%;
+	height:500px;
+	float:left;
+	margin-left:10px;
+	padding-left:0px;
+}
+
+.title {
+    width: 100%;
+    text-align: center;
+    font: 22pt times;
+	margin-top:0px;
+	background-color:#EEEFF2;
+	margin-bottom:30px;
+	border-bottom:1px solid black;
+}
+.subtitle {
+    width: 100%;
+    text-align: center;
+    margin: 0px 25px 50px 0px;
+    font: 14pt times;
+}
+
+.dimensions {
+    width: 40%;
+    background-color: #EEEFF2;
+	float:left;
+	margin-left:30px;
+	padding-top:5px;
+	padding-bottom:5px;
 	text-align:center;
 }
 
+#common_controls {
+	border-top:1px solid black;
+	border-bottom:1px solid black;
+	width: 100%;
+	background-color: #EEEFF2;
+	padding-left:0px;
+	margin-top:20px;
+	margin-left:auto;
+	margin-right:auto;
+	position:absolute;
+	top:69%;
+}
+
+@media screen and (min-width:1600px) {
+	#common_controls {
+		top:74%;
+	}
+}
+
+.checkbox {
+    margin-left:15px;
+}
+
+
 #map-canvas { 
-	width:50%;
-	height:840px; 
+	width:40%;
+	height:500px; 
 	margin-left:30px;
+	float:left;
+}
+
+#listingtypes {
+	margin-left:15px;
+	margin-top:10px;
+	margin-bottom:10px;
+	width:100%;
 }
 
 .invisible {
@@ -18,11 +82,11 @@ body {
 }
 
 #details {
-	margin-top:20px;
-	float:left;
-	margin-left:32px;
-	font-size:18px;
-	text-align:left;
+    float: left;
+    font-size: 16px;
+    margin-left: 52px;
+    margin-top: 10px;
+    text-align: left;
 }
 
 .label {
@@ -34,28 +98,23 @@ body {
 }	
 
 #houses {
-	margin-bottom:20px;
+	margin-top:10px;
+	margin-bottom:10px;
 }
 
-#bathroom,#bedrooms {
-	width:100px;
+#baths {
+	width:55%;
 	float:left;
 }
 
-#sqft,#yearbuilt {
+#bedrooms {
+	width:33%;
+	float:left;
+	padding-left:20px;
+}
+
+#bedrooms,#baths {
 	margin-top:20px;
-}
-
-#map-canvas {
-	float:left;
-}
-
-#controls {
-	float:left;
-	margin-left:30px;
-	background-color:#E7E7E7;
-	padding:20px;
-	text-align:left;
 }
 
 #bullet {
@@ -64,35 +123,85 @@ body {
 	height:82px;
 	margin-left:30px;
 	margin-top:50px;
+	position:absolute;
+	top:405px;
+	left:44%;
 }
 
 .actual {
-	height:20px;
-	margin-bottom:5px;
-	background-color:blue;
-	z-index:100;
-	position:absolute;
-	top:516px;
-	color:grey;
+    background-color: blue;
+    color: grey;
+    height: 28%;
+    margin-bottom: 5px;
+    margin-top: 34px;
+    position: absolute;
+    z-index: 100;
+	text-align:center;
 }
 
 .zestimate {
-	height:60px;
-	margin-bottom:5px;
-	background-color:#CDE2FA;
-	position:absolute;
-	top:495px;
-	color:grey;
-	vertical-align:text-top;
+    background-color: #A6BDDB;
+    color: grey;
+    height: 66%;
+    margin-bottom: 5px;
+    margin-top: 17px;
+    position: absolute;
+    vertical-align: text-top;
+	text-align:center;
 }
 
 .max {
-	height:100px;
+	height:108%;
 	margin-bottom:5px;
-	background-color:#DFE8F7;
+	background-color:#ECE7F2;
 	position:absolute;
-	top:475px;
 	color:gray;
 	vertical-align:text-top;
 	z-index:-5;
+	text-align:center;
+}
+
+#tt {
+	 position:absolute;
+	 display:block;
+	 background:url(images/tt_left.gif) top left no-repeat;
+ }
+ #tttop {
+	 display:block;
+	 height:5px;
+	 margin-left:5px;
+	 background:url(images/tt_top.gif) top right no-repeat;
+	 overflow:hidden;
+ }
+ #ttcont {
+	 display:block;
+	 padding:2px 12px 3px 7px;
+	 margin-left:5px;
+	 background:#666;
+	 color:#fff;
+ }
+#ttbot {
+	display:block;
+	height:5px;
+	margin-left:5px;
+	background:url(images/tt_bottom.gif) top right no-repeat;
+	overflow:hidden;
+}
+
+#sliders {
+	margin-top:30px;
+	width:100%;
+	margin-left:20px;
+	padding-bottom:30px;
+	padding-top:30px;
+}
+
+#amountPrice,#amountSqft,#amountYear {
+	background-color:#EEEFF2;
+	font-weight:normal;
+	border-style:none;
+}
+
+.slider {
+	width:250px;
 }

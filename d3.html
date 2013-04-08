@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+	<title></title>
+	<!-- our custom style sheet -->
+	<link rel="stylesheet" type="text/css" href="main.css"/>
+	<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
+	<!-- Link to d3 library -->
+	<script src="http://d3js.org/d3.v3.min.js"></script>
+	<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+	<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+  </head>
+
+  <body onload="initialize()">
+      <textarea id="zips" class="invisible">
+        {"values":[
+        {"zip":"2108","lat":42.357796,"lng":"-71.062674"},
+        {"zip":"2109","lat":42.359981,"lng":-71.054805},
+        {"zip":"2110","lat":42.355817,"lng":-71.055054},
+        {"zip":"2111","lat":42.351894,"lng":-71.060646},
+        {"zip":"2113","lat":42.365257,"lng":-71.055095},
+        {"zip":"2114","lat":42.361601,"lng":-71.065685},
+        {"zip":"2115","lat":42.343784,"lng":-71.090238},
+        {"zip":"2116","lat":42.350309,"lng":-71.075400},
+        {"zip":"2118","lat":42.339690,"lng":-71.073769},
+        {"zip":"2119","lat":42.324279,"lng":-71.085404},
+        {"zip":"2120","lat":42.333118,"lng":-71.096438},
+        {"zip":"2121","lat":42.308190,"lng":-71.082824},
+        {"zip":"2122","lat":42.296550,"lng":-71.055833},
+        {"zip":"2124","lat":42.287679,"lng":-71.072633},
+        {"zip":"2125","lat":42.316610,"lng":-71.060597},
+        {"zip":"2126","lat":42.274733,"lng":-71.091966},
+        {"zip":"2127","lat":42.334741,"lng":-71.045778},
+        {"zip":"2128","lat":42.376360,"lng":-71.029645},
+        {"zip":"2210","lat":42.348509,"lng":-71.043835},
+        {"zip":"2215","lat":42.346232,"lng":-71.100665}]
+        }
+        </textarea>
+      <div class="content">
+        <!--This title is an example only; we can brainstorm a new one.-->
+        <div class="title">Discover Boston: <span class="subtitle">Real Estate, At a Glance</span></div>
+       	
+		<!-- placeholder for our google map -->
+        <div id="map-canvas"></div>		
+        <div class="largeView">
+            <div class="scatterplot" id="pricePerSqFt"></div>
+            <div class="histogram" id="yAxisHistogram"></div>
+            <div class="histogram" id="xAxisHistogram"></div>
+        </div><br />
+        <div class="dimensions">
+            <div id="houses">
+				<input onclick="layCircles()" id="count" type="radio" name="type" />Number of houses 
+				<input onclick="layCircles()" id="average" type="radio" name="type" checked  />Average price
+				<input onclick="layCircles()" id="max" type="radio" name="type" />Max price
+				<input onclick="layCircles()" id="min" type="radio" name="type" />Min price 
+            </div>
+		</div>
+		
+		<!-- placeholder for bullet graph -->
+        <div class="smallView" id="bullet"></div>
+		<!-- placeholder for details on demand -->
+        <div id="details"></div>
+		
+		<div id="common_controls">
+			<div id="listingtypes">
+				<input id="forsale" onclick="filter()" type="radio" name="listing_type" checked />For Sale 
+				<input id="sold" onclick="filter()" type="radio" name="listing_type" />Sold
+			</div>	
+
+            <div id="bedrooms">
+                <div>Bedrooms</div>
+                <input type="checkbox" class="bedrooms" onclick="filter()" value="1" checked>1
+                <input type="checkbox" class="bedrooms" onclick="filter()"  value="2" checked>2
+                <input type="checkbox" class="bedrooms" onclick="filter()" value="3" checked>3
+                <input type="checkbox" class="bedrooms" onclick="filter()" value="4" checked>4
+                <input type="checkbox" class="bedrooms" onclick="filter()" value="5+" checked>5+
+            </div>
+
+            <div id="baths">
+                <div>Baths</div>
+                <input type="checkbox" class="baths" onclick="filter()" value="1" checked>1 - 1.5
+                <input type="checkbox" class="baths" onclick="filter()"  value="2" checked>2 - 2.5
+                <input type="checkbox" class="baths" onclick="filter()" value="3" checked>3 - 3.5
+                <input type="checkbox" class="baths" onclick="filter()" value="4" checked>4 - 4.5
+                <input type="checkbox" class="baths" onclick="filter()" value="5+" checked>5+
+            </div>
+
+            <table id="sliders">
+                <tr>
+					<td><label for="amountSqft">Square Footage:</label><input type="text" id="amountSqft" /></td>
+					<td><label for="amountPrice">Price:</label><input type="text" id="amountPrice" /></td>
+					<td><label for="amountYear">Year:</label><input type="text" id="amountYear" /></td>
+				</tr>
+                
+				<tr>
+					<td><div id="slider-range-sqft" class="slider"></div></td>
+					<td><div id="slider-range-price" class="slider"></div></td>
+					<td><div id="slider-range-year" class="slider"></div></td>
+				</tr>
+            </table>
+        </div>
+        <div class="barChart" id="yearVsPrice"></div>
+        <div class="barChart" id="pricePerZip"></div>
+        <div class="barChart" id="averagePrice"></div>
+       
+  <script src="main.js"></script>
+    </div>
+  </body>
+</html>
