@@ -384,7 +384,7 @@ function bulletGraph(zip) {
         .attr("class","actual")
         .transition().duration(600)
             .style("width",function(d){return d+"px"})
-            .text("average")
+            .text("actual avg")
             .attr("onmousemove",function(d) {return "tooltip.show('Average Price: $" + withCommas(Math.round(prices[zip]/parseInt(counts[zip])))+"');"})
             .attr("onmouseout","tooltip.hide();");
     
@@ -392,7 +392,7 @@ function bulletGraph(zip) {
         .attr("class","zestimate")
         .transition().duration(1000)
             .style("width",function(d){return d+"px"})
-            .text("zestimate")
+            .text("zestimate avg")
             .attr("onmousemove",function(d) {return "tooltip.show('Average Zestimate: $" + withCommas(Math.round(zestimates[zip]/parseInt(counts[zip])))+"');"})
             .attr("onmouseout","tooltip.hide();");
             
