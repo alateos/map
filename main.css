@@ -1,9 +1,15 @@
 body {
 	width:100%;
+	height:100%;
     margin: 0;
     padding: 0;
+	overflow-x:hidden;
+	background-color:white;
 }
 
+html {
+	height:100%;
+}
 
 #pricePerSqFt {
 	width:55%;
@@ -18,9 +24,9 @@ body {
     text-align: center;
     font: 22pt times;
 	margin-top:0px;
-	background-color:#EEEFF2;
+	background-color:white;
 	margin-bottom:30px;
-	border-bottom:1px solid black;
+	border-bottom:1px solid white;
 }
 .subtitle {
     width: 100%;
@@ -31,30 +37,31 @@ body {
 
 .dimensions {
     width: 40%;
-    background-color: #EEEFF2;
+    background-color: white;
 	float:left;
 	margin-left:30px;
 	padding-top:5px;
 	padding-bottom:5px;
 	text-align:center;
+	border:1px solid #D2D4D6;
 }
 
 #common_controls {
-	border-top:1px solid black;
-	border-bottom:1px solid black;
+	border-top:1px solid #D2D4D6;
+	border-bottom:1px solid white;
 	width: 100%;
-	background-color: #EEEFF2;
+	background-color: white;
 	padding-left:0px;
 	margin-top:20px;
 	margin-left:auto;
 	margin-right:auto;
 	position:absolute;
-	top:69%;
+	top:660px;
 }
 
 @media screen and (min-width:1600px) {
 	#common_controls {
-		top:74%;
+		top:700px;
 	}
 }
 
@@ -92,6 +99,26 @@ body {
 	top:380px;
 }
 
+#presentation {
+    float: left;
+    font-size: 16px;
+    left: 80%;
+    margin-left: 52px;
+    margin-top: 10px;
+    position: absolute;
+    text-align: left;
+    top: 2px;
+}
+
+#presentation a,#presentation a:visited {
+	text-decoration:none;
+	color:gray;
+}
+
+#presentation a:hover {
+	color:blue;
+}
+
 .label {
 	color:black;
 }
@@ -127,7 +154,7 @@ body {
 	margin-left:30px;
 	margin-top:50px;
 	position:absolute;
-	top:405px;
+	top:430px;
 	left:43.5%;
 }
 
@@ -202,7 +229,7 @@ body {
 }
 
 #amountPrice,#amountSqft,#amountYear {
-	background-color:#EEEFF2;
+	background-color:white;
 	font-weight:normal;
 	border-style:none;
 }
@@ -213,4 +240,25 @@ body {
 
 .slider {
 	width:250px;
+}
+
+#mask {
+	position:absolute;
+	width:100%;
+	height:100%;
+	background-color:black;
+	opacity:0.97;
+	top:0px;
+	left:0px;
+	text-align:center;
+	z-index:300;
+	display:none;
+}
+
+iframe {
+	text-align:center;
+	margin-top:10%;
+	width:800px;
+	height:600px;
+	border-style:none;
 }

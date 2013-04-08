@@ -270,7 +270,7 @@ function clearBuckets() {
 	zestimates = [];		
 }
 
-/** load a given home listing into the corresponding output arrays */
+/** loads a given home listing into the corresponding output arrays */
 function loadListing(zip,price, zestimate) {
 	// if the zip code for this home has not been registered yet
 	if(prices[zip] == null) {
@@ -356,7 +356,7 @@ function loadBuckets(d,beds,baths,min_sqft,max_sqft,min_year,max_year) {
 	}
 }
 
-/** create a bullet graph of actual versus project price based on selected zip code */
+/** creates a bullet graph of actual versus project price based on selected zip code */
 function bulletGraph(zip) {
 	// remove the "actual" bar
 	d3.select(".actual").remove();
@@ -405,7 +405,7 @@ function bulletGraph(zip) {
             .attr("onmouseout","tooltip.hide();");
 }
 
-// PricePerSqFtScatterplot
+/** creates the price-per-foot scatterplot  */
 function createPricePerSqFtScatterplot(data_in) {
         var margin = {top: 20, right: 20, bottom: 40, left: 100},
             width = 450 - margin.left - margin.right,
@@ -486,6 +486,7 @@ function createPricePerSqFtScatterplot(data_in) {
             .attr("fill","gray");
 }
 
+/** updates the chart given a selected zip code */
 function updateChartData(dataIn) {
 
     var minSqFt = parseInt($("#slider-range-sqft").slider("values",0));
@@ -547,7 +548,7 @@ function updateChartData(dataIn) {
             .call(d3.svg.axis().scale(yScale).orient("left"));
 }
 
-/*** Example of smoothly filtering out values, by only changing visibility.*/
+/** updates chart per selected controls (de-coupled from filter() to allow extensibility) */
 function updateChart() {
     // read all slider values
     var minSqFt = parseInt($("#slider-range-sqft").slider("values",0));
@@ -603,6 +604,7 @@ function updateChart() {
 
 }
 
+/** applies style to scatterplot circles that pertain to selected zip code */
 function updateChartZip(zip) {
    var svg = d3.select("body").select("#pricePerSqFt").selectAll("circle")
         .attr("stroke", function(d) {
@@ -614,18 +616,13 @@ function updateChartZip(zip) {
                 return d.zip == zip ? 2 : 1});
 }
 
-// only called when you click on the body of the page. outputs the data as is from csv file
-function showData(dataIn) {
-	console.log(dataIn);
-}
-
-// returns all the listing details in string form 
+/** returns all the listing details in string form */
 function listingToDetailsString(listingIn) {
     return "Price: $" + withCommas(listingIn.price) + "<br/>" + "SqFt: " + withCommas(listingIn.sqft) + "<br/>" +  "Beds: " + listingIn.beds + "<br/>" + "Baths: " + listingIn.baths + "<br/>" + "Zipcode: 0" + listingIn.zip + "<br/>" + "Zestimate: $" + withCommas(listingIn.zestimate);
 }
 
 
-//all tooltip code from: sixrevisions.com 
+/** anonymous function to create tooltip - code from: sixrevisions.com */
 var tooltip=function(){
  var id = 'tt';
  var top = 3;
@@ -701,7 +698,12 @@ var tooltip=function(){
  };
 }();
 
-// initialize square foot slider
+/** displays our presentation video */
+function toggleVideo() {
+	$('#mask').toggle();
+}
+
+/** initializes square foot slider. range is chosen arbitrarily */
 $(function() {
 	$( "#slider-range-sqft" ).slider({
 	  range: true,
@@ -717,7 +719,7 @@ $(function() {
 	  " - " + $( "#slider-range-sqft" ).slider( "values", 1 ) + " sq ft");
 });
 
-// initialize price range slider
+/** initialize price range slider. range is chosen arbitrarily */
 $(function() {
 	$( "#slider-range-price" ).slider({
 	  range: true,
@@ -733,7 +735,7 @@ $(function() {
 	  " - " +" $"+ $( "#slider-range-price" ).slider( "values", 1 ));
 });
 
-// initialize year range slider
+/** initialize year range slider. range is chosen arbitrarily  */
 $(function() {
 	$( "#slider-range-year" ).slider({
 	  range: true,

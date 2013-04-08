@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html>
-  <head>
-	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
-	<title></title>
+  <head profile="http://www.w3.org/2005/10/profile">
+	<meta name="viewport" />
+	<meta charset="utf-8">
+	<link rel="shortcut icon" type="image/png" href="images/favicon.ico">
+	<title>Discover Boston: Real Estate, At a Glance</title>
 	<!-- our custom style sheet -->
 	<link rel="stylesheet" type="text/css" href="main.css"/>
 	<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
@@ -61,6 +63,9 @@
 		<!-- placeholder for details on demand -->
         <div id="details"></div>
 		
+		<!-- loads our video presentation -->
+		<div id="presentation"><a href="#" onclick="toggleVideo()">[ PRESENTATION ]</a></div>
+		
 		<!-- placeholder for bullet graph -->
         <div class="smallView" id="bullet"></div>
 		
@@ -106,7 +111,10 @@
         <div class="barChart" id="pricePerZip"></div>
         <div class="barChart" id="averagePrice"></div>
        
-  <script src="main.js"></script>
+		<script src="main.js"></script>
     </div>
+	<div id="mask" onclick="toggleVideo()">
+		<iframe src="http://www.youtube.com/embed/BR94QmNwZJk"></iframe>
+	</div>
   </body>
 </html>
