@@ -2,10 +2,10 @@
 <html>
   <head>
 	<meta charset="utf-8">
-	<link rel="shortcut icon" type="image/png" href="images/favicon.ico">
+	<link rel="shortcut icon" type="image/png" href="img/favicon.ico">
 	<title>Discover Boston: with zillow.com</title>
 	<!-- our custom style sheet -->
-	<link rel="stylesheet" type="text/css" href="main.css"/>
+	<link rel="stylesheet" type="text/css" href="css/main.css"/>
 	<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
 	<!-- Link to d3 library -->
 	<script src="http://d3js.org/d3.v3.min.js"></script>
@@ -65,6 +65,9 @@
 		<!-- loads our video presentation -->
 		<div id="presentation"><a href="#" onclick="toggleVideo()">[ PRESENTATION ]</a></div>
 
+		<!-- shows our project presentation -->
+		<div id="description"><a href="#" onclick="toggleDescription()">[ DESCRIPTION ]</a></div>
+		
 		<div id="bullet_help">[ PLEASE SELECT A ZIP CODE BUBBLE FOR DETAILS ]</div>
 		
 		<!-- placeholder for bullet graph -->
@@ -113,10 +116,26 @@
         <div class="barChart" id="pricePerZip"></div>
         <div class="barChart" id="averagePrice"></div>
        
-		<script src="main.js"></script>
+		<script src="js/main.js"></script>
     </div>
 	<div id="mask" onclick="toggleVideo()">
 		<iframe src="http://www.youtube.com/embed/hOifES3byfk"></iframe>
+	</div>
+	<div id="description_mask" onclick="toggleDescription()">
+	<div id="project_desc">
+		<h3>Discover Boston was designed and built by Alain Ibrahim and Mike Schaffner</h3>
+		<ol>The four main parts of this dashboard-style visualization are:
+ <li>The Overhead Map, which allows the user to efficiently compare different zip codes' locations and general measures such as number of homes for sale (or sold), as well as average price of those homes. It also allows a user to click a specific zip code bubble for more details (see #3) and to reveal those listings on the scatterplot.</li>
+<li>The Price-per-SqFt Scatterplot shows all of the listings in the area (filtered by the Controls), and is also linked to the Overhead Map.</li>
+ 	<li>The Zip Code Bullet Graph appears upon selecting a zip code bubble, and shows the average price, Zestimate price, and max price of the selected zip code to better inform the viewer of the properties of that zip code.</li>
+ <li>The Controls, which are linked to all of the other views of the visualization.</li>
+ </ol>
+<ol>Each of these enables the general principles of interactive visualizations:
+<li>Overhead View First</li> 
+<li>Zoom and Filter</li>
+<li>Details on Demand</li>
+</ol> 
+</div>
 	</div>
   </body>
 </html>

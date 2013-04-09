@@ -111,12 +111,33 @@ html {
 	font-weight:bold;
 }
 
+#description {
+    float: left;
+    font-size: 16px;
+    left: 68%;
+    margin-left: 52px;
+    margin-top: 10px;
+    position: absolute;
+    text-align: left;
+    top: 2px;
+	font-weight:bold;
+}
+
 #presentation a,#presentation a:visited {
 	text-decoration:none;
 	color:gray;
 }
 
 #presentation a:hover {
+	color:blue;
+}
+
+#description a,#description a:visited {
+	text-decoration:none;
+	color:gray;
+}
+
+#description a:hover {
 	color:blue;
 }
 
@@ -213,13 +234,13 @@ code {
 	 position:absolute;
      z-index:4;
 	 display:block;
-	 background:url(images/tt_left.gif) top left no-repeat;
+	 background:url(../img/tt_left.gif) top left no-repeat;
  }
  #tttop {
 	 display:block;
 	 height:5px;
 	 margin-left:5px;
-	 background:url(images/tt_top.gif) top right no-repeat;
+	 background:url(../img/tt_top.gif) top right no-repeat;
 	 overflow:hidden;
  }
  #ttcont {
@@ -233,7 +254,7 @@ code {
 	display:block;
 	height:5px;
 	margin-left:5px;
-	background:url(images/tt_bottom.gif) top right no-repeat;
+	background:url(../img/tt_bottom.gif) top right no-repeat;
 	overflow:hidden;
 }
 
@@ -259,17 +280,31 @@ code {
 	width:250px;
 }
 
-#mask {
+#mask,#description_mask {
 	position:absolute;
 	width:100%;
 	height:100%;
-	background-color:black;
-	opacity:0.97;
+	background-color:#3E62A4;
+	opacity:0.9;
 	top:0px;
 	left:0px;
 	text-align:center;
 	z-index:300;
 	display:none;
+	cursor:pointer;
+}
+
+#description_mask {
+	padding:30px;
+	color:white;
+	font-weight:bold;
+	opacity:1;
+	opacity:0.96;
+}
+
+#project_desc {
+	width:800px;
+	text-align:left;
 }
 
 iframe {

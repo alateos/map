@@ -254,7 +254,7 @@ function clearCircles() {
 
 /** loads all of our content from 2 csv files */
 function initialize() {
-	d3.csv("boston_for_sale.csv", function(d) {
+	d3.csv("data/boston_for_sale.csv", function(d) {
 		// populate "homes for sale" array
 		data_for_sale = d;
 
@@ -269,7 +269,7 @@ function initialize() {
 	});
 
 	
-    d3.csv("boston_sold.csv", function(d) {
+    d3.csv("data/boston_sold.csv", function(d) {
 		// populate "homes sold" array
 		data_sold = d;
 	});
@@ -661,6 +661,11 @@ var tooltip=function(){
 /** displays our presentation video */
 function toggleVideo() {
 	$('#mask').toggle();
+}
+
+/** displays our project details */
+function toggleDescription() {
+	$('#description_mask').toggle();
 }
 
 /** initializes square foot slider. range is chosen arbitrarily */
