@@ -5,7 +5,6 @@ var data_sold = new Array();
 // references which array the user is working with at any moment
 var selected_array = new Array();
 
-
 // the sum of all home prices for each zip code in our data set
 var prices = new Array();
 // the count of all home listings for each zip code in our data set
@@ -109,11 +108,19 @@ function filter() {
 	document.getElementById("details").innerHTML = "";
     
     // clear out bullet graph
-	document.getElementById("bullet").innerHTML = "";
+	clearBulletGraph();		
 }
+
+/** clears out bullet graph */
+function clearBulletGraph() {
+	document.getElementById("bullet").innerHTML = "";
+}	
 
 /** draws the circles onto the google map */
 function layCircles() {
+	// clear out bullet graph
+	clearBulletGraph();
+	
 	// removes existing circles (if any) off the map
 	clearCircles();
 
@@ -179,6 +186,15 @@ function showDetails(zip) {
 	document.getElementById("details").innerHTML = getDetails(zip);
 }
 
+/** gets the name of the zip locale */
+function getZipName(zip) {
+	for(var i in zips.values) {
+		if(parseInt(zips.values[i].zip) == parseInt(zip)) {
+			return zips.values[i].name;
+		}
+	}
+}
+
 /** 
 	return dollar amounts to contain commas 
 	Borrowed from: http://stackoverflow.com/questions/2901102/how-to-print-a-number-with-commas-as-thousands-separators-in-javascript
@@ -189,7 +205,7 @@ function withCommas(x) {
 
 /** returns html markup for details on demand, based on user input */
 function getDetails(zip) {
-	var text = "<span class='label'>Zip Code: </span><span class='value'>" + zip + "</span>";
+	var text = "<span class='label'>Zip Code: </span><span class='value'>" + "0" + zip + " ( " + getZipName(zip) + " )" + "</span>";
 	if(document.getElementById("count").checked) {
 		var num_listings = text + "<br />" + "<span class='label'>Number of listings:</span> " + "<span class='value'>" + counts[zip] + "</span>";
 		return num_listings;
