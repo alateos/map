@@ -564,62 +564,6 @@ function updateChartData(dataIn) {
             .call(d3.svg.axis().scale(yScale).orient("left"));
 }
 
-/** updates chart per selected controls (de-coupled from filter() to allow extensibility) */
-function updateChart() {
-    // read all slider values
-    var minSqFt = parseInt($("#slider-range-sqft").slider("values",0));
-    var maxSqFt = parseInt($("#slider-range-sqft").slider("values",1));
-    var minPrice = parseInt($("#slider-range-price").slider("values",0));
-    var maxPrice = parseInt($("#slider-range-price").slider("values",1));
-    var minYear = parseInt($("#slider-range-year").slider("values",0));
-    var maxYear = parseInt($("#slider-range-year").slider("values",1));
-    
-	// get all checkboxes from our controls
-	var checkboxes = document.getElementsByTagName("input");
-    
-    var bedrooms = new Array();
-    var baths = new Array();
-    
-    // populate bedrooms and bathrooms array
-	for(var i in checkboxes) {
-		if(checkboxes[i].className == "bedrooms") { 
-			if(checkboxes[i].checked) {
-				bedrooms.push(checkboxes[i].value);
-			}
-		} else if(checkboxes[i].className == "baths") {
-            if(checkboxes[i].checked) {
-				baths.push(checkboxes[i].value);
-			}
-        }
-	}
-    
-    xDomain = [minSqFt,maxSqFt];
-    yDomain = [maxPrice,minPrice];
-
-    // now update the line chart
-    var xScale = d3.scale.linear()
-        .domain(xDomain)
-        .range([0,330]);
-    var yScale = d3.scale.linear()
-        .domain(yDomain)
-        .range([0,240]);
-        
-    var svg = d3.select("body").select("#pricePerSqFt").selectAll("circle")
-        .transition().duration(1000)
-            .attr("cx",function(d) {return xScale(d.sqft)})
-            .attr("cy",function(d) {return yScale(d.price)})
-            .attr("visibility", function(d) {
-                return d.price > minPrice && d.price < maxPrice && d.sqft > minSqFt && d.sqft < maxSqFt && bedrooms.indexOf(String(d.beds))>=0 && baths.indexOf(String(d.baths))>=0  ? "visible" : "hidden"});
-    
-    d3.select("#pricePerSqFt").select("g.x.axis")
-        .transition().duration(1000)
-            .call(d3.svg.axis().scale(xScale).orient("bottom").ticks(5));
-    d3.select("#pricePerSqFt").select("g.y.axis")
-        .transition().duration(1000)
-            .call(d3.svg.axis().scale(yScale).orient("left"));
-
-}
-
 /** applies style to scatterplot circles that pertain to selected zip code */
 function updateChartZip(zip) {
    var svg = d3.select("body").select("#pricePerSqFt").selectAll("circle")
