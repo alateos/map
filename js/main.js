@@ -134,7 +134,13 @@ function filter() {
 	document.getElementById("details").innerHTML = "";
     
     // clear out bullet graph
-	clearBulletGraph();		
+	clearBulletGraph();
+	
+	// if map is loaded, redraw polygons
+	if(map) {
+		clearPolygons();
+		layPolygons();
+	} 
 }
 
 /** clears out bullet graph */
@@ -250,17 +256,19 @@ function getDetails(zip) {
 function getFillColor(zip) {
 	if(document.getElementById("count").checked) {
 		var num_listings = counts[zip];
-		if(num_listings > 0 && num_listings <= 10) {
+		if(num_listings > 0 && num_listings <= 50) {
 			return colors[0];
-		} else if(num_listings > 10 && num_listings <= 20) {
-			return colors[1];
-		} else if(num_listings > 20 && num_listings <= 50) {
-			return colors[2];
 		} else if(num_listings > 50 && num_listings <= 100) {
+			return colors[1];
+		} else if(num_listings > 100 && num_listings <= 200) {
+			return colors[2];
+		} else if(num_listings > 200 && num_listings <= 300) {
 			return colors[3];
-		} else {
+		} else if(num_listings > 300) {
 			return colors[4];
-		} 
+		} else {
+			return "transparent";
+		}
 	} else if (document.getElementById("average").checked) {
 		var average = ((prices[zip]/counts[zip]));
 		if(average > 0 && average <= 250000) {
@@ -271,9 +279,11 @@ function getFillColor(zip) {
 			return colors[2];
 		} else if(average > 1000000 && average <= 3000000) {
 			return colors[3];
-		} else {
+		} else if(average > 3000000) {
 			return colors[4];
-		} 
+		} else {
+			return "transparent";
+		}
 	} 
 }
 
