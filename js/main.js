@@ -19,19 +19,30 @@ var zestimates = new Array();
 // our zip code lookup values data set (includes geo coordinates)
 var zips = JSON.parse(document.getElementById("zips").value);
 
-// contains the google maps circles to be overlaid on our map
-var circles = new Array();
+// zip code lat/lng coordinates in json format
+var zips_coords = JSON.parse(document.getElementById("zips_coordinates").value);
+
+// contains the google maps polygons to be overlaid on our map
+var polygons = new Array();
 
 // google maps map container
 var map = "";
 
-/** creates the google map and calls for the circles to be created */
+// gradual fill colors for zip code areas
+var colors = new Array();
+
+// tracks polygon colors
+var polygon_colors = new Array();
+
+/** creates the google map and calls for the polygons to be created */
 function drawMap() {
+	// center of map
+	var center = new google.maps.LatLng(42.316610, -71.060597);
 	// map options to initialize with
 	var mapOptions = {
 	// the terrain map is initially centered at boston with a zoom level of 13
-	center: new google.maps.LatLng(42.3583, -71.0603),
-	zoom: 13,
+	center: center,
+	zoom: 12,
 	mapTypeId: google.maps.MapTypeId.TERRAIN
 	};
 
@@ -39,8 +50,26 @@ function drawMap() {
 	map = new google.maps.Map(document.getElementById("map-canvas"),
 	mapOptions);
 
-	// plot the intensity circles on the map
-	layCircles();
+	// plot the zip code polygons on the map
+	layPolygons();
+}
+
+// returns an array of google latlng objects based on the given zip's polygon coordinates
+function getZipPolygonCoords(zip) {
+	// temp array to be returned
+	var coords_array = new Array();
+	
+	for (var i in zips_coords) {
+		if(zips_coords[i].zip == zip) {
+			for(var j in zips_coords[i].values) {
+				var lnglat = zips_coords[i].values[j].lnglat.split(" ");
+				lng = lnglat[0];
+				lat = lnglat[1];
+				coords_array.push(new google.maps.LatLng(lat,lng));
+			}
+		}
+	}
+	return coords_array;
 }
 
 /** filters the data based on selected controls and calls for a "redraw" of the map */
@@ -101,9 +130,6 @@ function filter() {
 	// populate output arrays based on filter variables
 	loadBuckets(selected_array,bedrooms,baths,min_sqft,max_sqft,min_year,max_year);
 
-	// draw circles on map
-	layCircles();
-
 	// clear out details on demand div
 	document.getElementById("details").innerHTML = "";
     
@@ -116,68 +142,67 @@ function clearBulletGraph() {
 	document.getElementById("bullet").innerHTML = "";
 }	
 
-/** draws the circles onto the google map */
-function layCircles() {
+/** draws the polygons onto the google map */
+function layPolygons() {
 	// clear out bullet graph
 	clearBulletGraph();
-	
-	// removes existing circles (if any) off the map
-	clearCircles();
+	for (var i in zips_coords) {
+			// zip area polygon coordinates
+			var zipCoords = getZipPolygonCoords(zips_coords[i].zip);
 
-	// based on our zip code lookup data set
-	for(i=0;i<zips.values.length;i++) {
-		// create a google latlng object for selected zip code
-		var latlng = new google.maps.LatLng(parseFloat(zips.values[i].lat),parseFloat(zips.values[i].lng));
-		// set the radius of the circle based on the selected control
-		var radius = getRadius(zips.values[i].zip);
-		// create a new google maps circle object with given geo coordinates and radius
-		var circle = new google.maps.Circle({
-						  center: latlng,
-						  map: map,
-						  radius:radius,
-						  fillColor:"#E34A33",
-						  strokeColor:"black",
-						  fillOpacity:0.65,
-						  strokeWeight:1.5
-		});
-
-		// add an event listener to each circle to enable details on demand
-		google.maps.event.addListener(circle,'click', selectZip(circle,zips.values[i].zip,circles));
-
-		// add the newly created circle to an array, so that we can later track it and manipulate it
-		circles.push(circle);
+			// zip area polygon
+			var zipArea = new google.maps.Polygon({
+				paths:zipCoords,
+				strokeColor: "black",
+				strokeOpacity: 0.8,
+				strokeWeight: 2,
+				fillColor: getFillColor(zips_coords[i].zip),
+				fillOpacity: 0.35
+			  });
+			  
+			zipArea.setMap(map);
+			
+			// add an event listener to each zip area
+			google.maps.event.addListener(zipArea,'click', selectZipArea(zipArea,zips_coords[i].zip));
+			
+			// add polygon to polygons array
+			polygons.push(zipArea);
+			
+			// add polygon colors
+			polygon_colors.push(zipArea.fillColor);
 	}
 }
 
 /** 
-	callback function when clicking on a google map circle (i.e. zip code) 
-	colors the selected circle and maintains the same color for the other circles on the map
+	callback function when clicking on a google map polygon (i.e. zip code) 
+	fills the selected zip area with a predefined color and updates the bullet graph and scatterplot
 */
-function selectZip(circle,zip,circles) {
-	// the anonymous function was needed to have the callback work with the event listener
+function selectZipArea(zipArea,zip) {
 	return function() {
-		// remove all google map circles off our map, change their color, and then add them back to the map
-		for(var i in circles) {
-		circles[i].setMap(null);
-		circles[i].fillColor = "#E34A33";
-		circles[i].setMap(map);
-	}
+		for(var i in polygons) {
+			// remove all polygons off the map, reset their color to red, then lay them back on map
+			polygons[i].setMap(null);
+			polygons[i].fillColor = polygon_colors[i];
+			polygons[i].setMap(map);
+		}
+		
+		// remove selected zip code area off the map
+		zipArea.setMap(null);
+		
+		// change the color of the select zip code area
+		zipArea.fillColor = "blue";
+		
+		// put the zip code polygon back on the map
+		zipArea.setMap(map);
+		
+		// output details on demand in designated div
+		showDetails(zip);
+		
+		// create bullet graph
+		bulletGraph(zip);
 
-	// remove selected circle off the map
-	circle.setMap(null);
-	// change the color of the selected circle
-	circle.fillColor = "blue";
-	// put the circle back on the map
-	circle.setMap(map);
-
-	// output details on demand in designated div
-	showDetails(zip);
-	
-	// create bullet graph
-	bulletGraph(zip);
-
-	//PASS THE ZIP CODE TO SCATTER PLOT BELOW
-	updateChartZip(zip);
+		//PASS THE ZIP CODE TO SCATTER PLOT BELOW
+		updateChartZip(zip);
 	}
 }
 
@@ -221,48 +246,60 @@ function getDetails(zip) {
 	}
 }
 
-/** returns radius length to be applied to each circle on the google map */
-function getRadius(zip) {
+/** returns the fill color based on the home price */
+function getFillColor(zip) {
 	if(document.getElementById("count").checked) {
 		var num_listings = counts[zip];
-		return num_listings;
+		if(num_listings > 0 && num_listings <= 10) {
+			return colors[0];
+		} else if(num_listings > 10 && num_listings <= 20) {
+			return colors[1];
+		} else if(num_listings > 20 && num_listings <= 50) {
+			return colors[2];
+		} else if(num_listings > 50 && num_listings <= 100) {
+			return colors[3];
+		} else {
+			return colors[4];
+		} 
 	} else if (document.getElementById("average").checked) {
-		// we multiply all price figures by 100 so that the circles are visible to the user with given zoom level
-		var average = ((prices[zip]/counts[zip])/1000000) * 100;
-		return average;
-	} else if (document.getElementById("max").checked) {
-		// we multiply all price figures by 100 so that the circles are visible to the user with given zoom level
-		var maximum = ((maxes[zip]/counts[zip])/1000000) * 100;
-		return maximum;
-	} else if (document.getElementById("min").checked) {
-		// we multiply all price figures by 100 so that the circles are visible to the user with given zoom level
-		var minimum = ((mins[zip]/counts[zip])/1000000) * 100;
-		return minimum;
-	}
+		var average = ((prices[zip]/counts[zip]));
+		if(average > 0 && average <= 250000) {
+			return colors[0];
+		} else if(average > 250000 && average <= 500000) {
+			return colors[1];
+		} else if(average > 500000 && average <= 1000000) {
+			return colors[2];
+		} else if(average > 1000000 && average <= 3000000) {
+			return colors[3];
+		} else {
+			return colors[4];
+		} 
+	} 
 }
 
-/** clears all the google map circles off the map */
-function clearCircles() {
-	for(var circle in circles) {
-		// remove circle off map
-		circles[circle].setMap(null);
+/** clears all the polygons off the map */
+function clearPolygons() {
+	for(var polygon in polygons) {
+		// remove polygon off map
+		polygons[polygon].setMap(null);
 	}
 
-	// reset circles array so that we can repopulate it
-	circles = new Array();
+	// reset polygons array so that we can repopulate it
+	polygons = new Array();
+	polygon_colors = new Array();
 }
 
 /** loads all of our content from 2 csv files */
 function initialize() {
+	colors.push("#FEEBE2");
+	colors.push("#FBB4B9");
+	colors.push("#F768A1");
+	colors.push("#C51B8A");
+	colors.push("#7A0177");
+
 	d3.csv("data/boston_for_sale.csv", function(d) {
 		// populate "homes for sale" array
 		data_for_sale = d;
-
-		// calls for map to be drawn, since this is our default option
-		drawMap();
-        
-		// calls all filters to be applied to newly created map
-		filter();
         
         // create initial scatterplot
         createPricePerSqFtScatterplot(data_for_sale);
@@ -272,9 +309,15 @@ function initialize() {
     d3.csv("data/boston_sold.csv", function(d) {
 		// populate "homes sold" array
 		data_sold = d;
-	});
-    
 
+		// calls all filters to be applied to newly created map
+		filter(); 		
+	
+		// calls for map to be drawn, since this is our default option
+		drawMap();
+      
+ 
+	});
 }
 
 /** clears all of our output arrays */
