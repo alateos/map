@@ -725,8 +725,6 @@
             <div id="houses">
 				<input onclick="clearPolygons();layPolygons()" id="count" type="radio" name="type" />Number of listings 
 				<input onclick="clearPolygons();layPolygons()" id="average" type="radio" name="type" checked  />Average price
-				<!--<input onclick="layCircles()" id="max" type="radio" name="type" />Max price
-				<input onclick="layCircles()" id="min" type="radio" name="type" />Min price -->
             </div>
 		</div>
 
@@ -742,10 +740,11 @@
 		<div id="bullet_help">[ PLEASE SELECT A ZIP CODE BUBBLE FOR DETAILS ]</div>
 		
 		<!-- placeholder for bullet graph -->
-        <div class="smallView" id="bullet">
-		</div>
+        <div id="bullet"></div>
 		
+		<!--
 		<div id="common_controls">
+
 			<div id="listingtypes">
 				<input id="forsale" onclick="filter()" type="radio" name="listing_type" checked />For Sale 
 				<input id="sold" onclick="filter()" type="radio" name="listing_type" />Sold
@@ -783,11 +782,43 @@
 				</tr>
             </table>
         </div>
-        <div class="barChart" id="yearVsPrice"></div>
+		-->
+
+		<!-- placeholder for scatterplot -->
         <div class="barChart" id="pricePerZip"></div>
-        <div class="barChart" id="averagePrice"></div>
        
-		<script src="js/main.js"></script>
+
+		<div id="listingtypes">
+			<input id="forsale" onclick="filter()" type="radio" name="listing_type" checked />For Sale 
+			<input id="sold" onclick="filter()" type="radio" name="listing_type" />Sold
+		</div>
+
+		<div id="bedrooms">
+			<div>Bedrooms</div>
+			<input type="checkbox" class="bedrooms" onclick="filter()" value="1" checked>1<br />
+			<input type="checkbox" class="bedrooms" onclick="filter()"  value="2" checked>2<br />
+			<input type="checkbox" class="bedrooms" onclick="filter()" value="3" checked>3<br />
+			<input type="checkbox" class="bedrooms" onclick="filter()" value="4" checked>4<br />
+			<input type="checkbox" class="bedrooms" onclick="filter()" value="5+" checked>5+<br />
+		</div>
+		
+		<div id="baths">
+			<div>Baths</div>
+			<input type="checkbox" class="baths" onclick="filter()" value="1" checked>1<br />
+			<input type="checkbox" class="baths" onclick="filter()"  value="2" checked>2<br />
+			<input type="checkbox" class="baths" onclick="filter()" value="3" checked>3<br />
+			<input type="checkbox" class="baths" onclick="filter()" value="4" checked>4<br />
+			<input type="checkbox" class="baths" onclick="filter()" value="5+" checked>5+<br />
+		</div>
+		
+		<div id="sliders">
+			Square Footage <input type="text" id="amountSqft" />
+			<div id="slider-range-sqft" class="slider"></div>
+			Price <input style="margin-top:30px;" type="text" id="amountPrice" />
+			<div id="slider-range-price" class="slider"></div>
+		</div>
+
+	    <script src="js/main.js"></script>
     </div>
 	<div id="mask" onclick="toggleVideo()">
 		<iframe src="http://www.youtube.com/embed/hOifES3byfk"></iframe>

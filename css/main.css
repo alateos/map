@@ -12,7 +12,7 @@ html {
 }
 
 #pricePerSqFt {
-	width:55%;
+	width:40%;
 	height:500px;
 	float:left;
 	margin-left:10px;
@@ -36,7 +36,9 @@ html {
 }
 
 .dimensions {
-    width: 40%;
+	top:64px;
+	position:absolute;
+    width: 35%;
     background-color: lightgray;
 	float:left;
 	margin-left:30px;
@@ -71,17 +73,19 @@ html {
 
 
 #map-canvas { 
-	width:40%;
+	width:35%;
 	height:500px; 
 	margin-left:30px;
 	float:left;
+	margin-top:52px;
 }
 
 #listingtypes {
-	margin-left:15px;
+	padding-left:15px;
 	margin-top:10px;
 	margin-bottom:10px;
-	width:100%;
+	width:15%;
+	float:left;
 }
 
 .invisible {
@@ -95,8 +99,8 @@ html {
     margin-top: 10px;
     text-align: left;
 	position:absolute;
-	left:42%;
-	top:380px;
+	left:10%;
+	top:613px;
 }
 
 #presentation {
@@ -155,12 +159,12 @@ html {
 }
 
 #baths {
-	width:55%;
+	width:7%;
 	float:left;
 }
 
 #bedrooms {
-	width:33%;
+	width:7%;
 	float:left;
 	padding-left:20px;
 }
@@ -176,28 +180,33 @@ html {
 	margin-left:30px;
 	margin-top:50px;
 	position:absolute;
-	top:430px;
+	top:564px;
 	left:43.5%;
 	color:lightgray;
+}
+
+#controls {
+	background-color:lightgray;
+	width:15%;
+	height:50px;
+	float:left;
 }
 
 .actual {
     background-color: blue;
     color: grey;
-    height: 28%;
-    margin-bottom: 5px;
-    margin-top: 34px;
+    width:20px;
     position: absolute;
     z-index: 2;
 	text-align:center;
+	margin-left:20px;
 }
 
 .zestimate {
     background-color: #A6BDDB;
     color: grey;
-    height: 66%;
-    margin-bottom: 5px;
-    margin-top: 17px;
+    width:20px;
+	margin-left:40px;
     position: absolute;
     vertical-align: text-top;
 	text-align:center;
@@ -205,8 +214,7 @@ html {
 }
 
 .max {
-	height:108%;
-	margin-bottom:5px;
+	width:20px;
 	background-color:#ECE7F2;
 	position:absolute;
 	color:gray;
@@ -259,17 +267,26 @@ code {
 }
 
 #sliders {
-	margin-top:30px;
-	width:100%;
+	margin-top:20px;
+	width:15%;
 	margin-left:20px;
-	padding-bottom:30px;
-	padding-top:30px;
+	float:left;
+}
+
+#sliders input {
+	padding-left:3px;
+	font-weight:bold;
 }
 
 #amountPrice,#amountSqft,#amountYear {
-	background-color:lightgray;
 	font-weight:normal;
 	border-style:none;
+	width:87px;
+	margin-bottom:10px;
+}
+
+#amountPrice {
+	width:148px;
 }
 
 .year {

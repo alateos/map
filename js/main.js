@@ -95,6 +95,11 @@ function filter() {
 	// value of maximum year entered by user
     var max_year = parseInt($("#slider-range-year").slider("values",1));
 
+	// value of minimum year entered by user
+    var min_price = parseInt($("#slider-range-price").slider("values",0));
+	// value of maximum year entered by user
+    var max_price = parseInt($("#slider-range-price").slider("values",1));
+	
 	// references the "for sale" radio button
 	var for_sale = document.getElementById("forsale");
 	// references the "sold" radio button
@@ -128,7 +133,7 @@ function filter() {
 	}
 
 	// populate output arrays based on filter variables
-	loadBuckets(selected_array,bedrooms,baths,min_sqft,max_sqft,min_year,max_year);
+	loadBuckets(selected_array,bedrooms,baths,min_sqft,max_sqft,min_year,max_year,min_price,max_price);
 
 	// clear out details on demand div
 	document.getElementById("details").innerHTML = "";
@@ -313,6 +318,9 @@ function initialize() {
         
         // create initial scatterplot
         createPricePerSqFtScatterplot(data_for_sale);
+		
+		// load initial listings on scatterplot
+		updateChartData(selected_array);
 	});
 
 	
@@ -326,6 +334,7 @@ function initialize() {
 		// calls for map to be drawn, since this is our default option
 		drawMap();
       
+		
  
 	});
 }
@@ -372,7 +381,7 @@ function loadListing(zip,price, zestimate) {
 }
 
 /** populates our output arrays given the set of filters selected by user */
-function loadBuckets(d,beds,baths,min_sqft,max_sqft,min_year,max_year) {
+function loadBuckets(d,beds,baths,min_sqft,max_sqft,min_year,max_year,min_price,max_price) {
 	// flags if at least 1 bedroom has been selected
 	var bed_criterion = 0;
 	// flags if at least 1 bathroom has been selected
@@ -381,7 +390,9 @@ function loadBuckets(d,beds,baths,min_sqft,max_sqft,min_year,max_year) {
 	var sqft_criterion = 0;
 	// flags if at least 1 year has been selected
 	var year_criterion = 0;
-
+	// flags if price has been selected
+	var price_criterion = 0;
+	
 	// for each home listing in the selected array
 	for (var listing in selected_array) {
 		// check how many bedrooms were selected
@@ -411,9 +422,14 @@ function loadBuckets(d,beds,baths,min_sqft,max_sqft,min_year,max_year) {
 		if (parseInt(selected_array[listing].yearbuilt) >= parseInt(min_year) && parseInt(selected_array[listing].yearbuilt) <= parseInt(max_year)) {
 			year_criterion = 1;
 		}
+		
+		// check if home listing falls within selected price range
+		if (parseInt(selected_array[listing].price) >= parseInt(min_price) && parseInt(selected_array[listing].price) <= parseInt(max_price)) {
+			price_criterion = 1;
+		}
 
 		// check if the necessary filters were selected to cause a meaningful query
-		if (bed_criterion == 1 && bath_criterion == 1 && sqft_criterion == 1 && year_criterion == 1) {
+		if (bed_criterion == 1 && bath_criterion == 1 && sqft_criterion == 1  && price_criterion == 1) {
 			loadListing(selected_array[listing].zip,selected_array[listing].price,selected_array[listing].zestimate);
 		} 
 
@@ -422,6 +438,7 @@ function loadBuckets(d,beds,baths,min_sqft,max_sqft,min_year,max_year) {
 		bath_criterion = 0;
 		sqft_criterion = 0;
 		year_criterion = 0;
+		price_criterion = 0;
 	}
 }
 
@@ -434,7 +451,7 @@ function bulletGraph(zip) {
 	// remove the "max" bar
 	d3.select(".max").remove();
 	// scale our range to maximum price of selected zip, and the range to the width of the bullet graph
-	var scale =	d3.scale.linear().domain([0,maxes[zip]]).range([0,500]);
+	var scale =	d3.scale.linear().domain([0,maxes[zip]]).range([0,300]);
 	// scale actual price amount
 	price = scale(parseInt(parseInt(prices[zip])/parseInt(counts[zip])));
 	// scale max value per selected zip
@@ -447,12 +464,12 @@ function bulletGraph(zip) {
 	zestimate = [zestimate];
 	// max data array to be passed to d3
 	max = [max];
+	
 	// add animated bars to bullet graph with set parameters
-
     d3.select("#bullet").selectAll("div").data(price).enter().append("div")
         .attr("class","actual")
         .transition().duration(600)
-            .style("width",function(d){return d+"px"})
+            .style("height",function(d){return d+"px"})
             .text("actual avg")
             .attr("onmousemove",function(d) {return "tooltip.show('Average Price: $" + withCommas(Math.round(prices[zip]/parseInt(counts[zip])))+"');"})
             .attr("onmouseout","tooltip.hide();");
@@ -460,7 +477,7 @@ function bulletGraph(zip) {
     d3.select("#bullet").data(zestimate).append("div")
         .attr("class","zestimate")
         .transition().duration(1000)
-            .style("width",function(d){return d+"px"})
+            .style("height",function(d){return d+"px"})
             .text("zestimate avg")
             .attr("onmousemove",function(d) {return "tooltip.show('Average Zestimate: $" + withCommas(Math.round(zestimates[zip]/parseInt(counts[zip])))+"');"})
             .attr("onmouseout","tooltip.hide();");
@@ -468,7 +485,7 @@ function bulletGraph(zip) {
 	d3.select("#bullet").data(max).append("div")
         .attr("class","max")
         .transition().duration(1300)
-            .style("width",function(d){return d+"px"})
+            .style("height",function(d){return d+"px"})
             .text("max")
             .attr("onmousemove",function(d) {return "tooltip.show('Max Price: $" + withCommas(Math.round(maxes[zip]))+"');"})
             .attr("onmouseout","tooltip.hide();");
@@ -555,7 +572,7 @@ function createPricePerSqFtScatterplot(data_in) {
             .attr("fill","gray");
 }
 
-/** updates the chart given a selected zip code */
+/** updates the chart given a selected data */
 function updateChartData(dataIn) {
 
     var minSqFt = parseInt($("#slider-range-sqft").slider("values",0));
